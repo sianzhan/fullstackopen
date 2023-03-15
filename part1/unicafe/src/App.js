@@ -4,7 +4,7 @@ const Header = props => <h1>{props.text}</h1>
 
 const Button = props => <button onClick={props.handleClick}>{props.text}</button>
 
-const Display = props => <div>{props.name} {props.value}</div>
+const StatisticLine = props => <div>{props.text} {props.value}</div>
 
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad
@@ -14,16 +14,16 @@ const Statistics = ({ good, neutral, bad }) => {
   if (all === 0) {
     return <div>No feedback given</div>
   }
-  
+
   return (
-    <>
-      <Display name='good' value={good} />
-      <Display name='neutral' value={neutral} />
-      <Display name='bad' value={bad} />
-      <Display name='all' value={all} />
-      <Display name='average' value={average} />
-      <Display name='positive' value={positive + ' %'} />
-    </>
+    <div>
+      <StatisticLine text='good' value={good} />
+      <StatisticLine text='neutral' value={neutral} />
+      <StatisticLine text='bad' value={bad} />
+      <StatisticLine text='all' value={all} />
+      <StatisticLine text='average' value={average} />
+      <StatisticLine text='positive' value={positive + ' %'} />
+    </div>
   )
 }
 
