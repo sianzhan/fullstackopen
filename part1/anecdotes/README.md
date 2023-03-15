@@ -1,6 +1,6 @@
-# Exercises 1.6.-1.11. : Unicafe
+# Exercises 1.12.-1.14. : Anecdotes
 
-This is a React application for collecting customer feedback and displays statistics on the feedback received, for the student restaurant of the University of Helsinki Unicafe.
+The world of software engineering is filled with anecdotes that distill timeless truths from our field into short one-liners. This is a React application for that can be clicked to display a random anecdote of the day, from the field of software engineering. It also features a voting system to show the anecdote with the highest number of votes.
 
 ## Usage
 
