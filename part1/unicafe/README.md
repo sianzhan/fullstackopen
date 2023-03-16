@@ -6,6 +6,10 @@ This is a React application for collecting customer feedback and displays statis
 
 To run the application, clone the repository and run the following command in your terminal:
 
+### `npm install`
+
+Which downloads and installs the package and respective dependency files necessary for the application to run.
+
 ### `npm start`
 
 Which runs the app in the development mode.\
