@@ -1,6 +1,6 @@
-# Exercises 1.1.-1.5. : Course Information
+# Exercises 2.1.-2.5. : Course Information
 
-This is a simple React application that displays information about a course with its name, parts, and the total number of exercises.
+This is a simple React application that displays information about courses with their name, parts, and the total number of exercises.
 
 ## Usage
 
