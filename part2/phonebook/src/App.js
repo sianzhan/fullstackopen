@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/persons'
 
 const Filter = ({ searchTerm, handleSearchTermChange }) => (
   <div>filter shown with <input value={searchTerm} onChange={handleSearchTermChange} /></div>
@@ -34,11 +35,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService.getAll().then(persons => setPersons(persons))
   }, [])
 
   const addPerson = (event) => {
@@ -57,9 +54,8 @@ const App = () => {
       return
     }
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => response.data)
+    personService
+      .create(personObject)
       .then(returnedPerson => {
         setPersons([...persons, returnedPerson])
         setNewName('')
