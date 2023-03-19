@@ -40,26 +40,41 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1
+    const existingPerson = persons.find(person => person.name === newName)
+    const isPersonExisting = existingPerson !== undefined
+
+    if (isPersonExisting) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const personObject = {
+          name: existingPerson.name,
+          number: newNumber,
+          id: existingPerson.id
+        }
+
+        personService
+          .update(personObject)
+          .then(returnedPerson => {
+            setPersons([...persons.filter(person => person !== existingPerson), returnedPerson])
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     }
+    else {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1
+      }
 
-    const isDuplicate = persons.some(person => person.name === newName)
-
-    if (isDuplicate) {
-      alert(`${newName} is already added to phonebook`)
-      return
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons([...persons, returnedPerson])
+          setNewName('')
+          setNewNumber('')
+        })
     }
-
-    personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons([...persons, returnedPerson])
-        setNewName('')
-        setNewNumber('')
-      })
   }
 
   const deletePerson = (person) => {
