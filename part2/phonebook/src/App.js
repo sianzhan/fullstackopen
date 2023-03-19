@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Filter = ({ searchTerm, handleSearchTermChange }) => (
@@ -14,7 +13,7 @@ const PersonForm = ({ addPerson, newName, newNumber, handleNameChange, handleNum
   </form>
 )
 
-const Persons = ({ persons, searchTerm }) => {
+const Persons = ({ persons, searchTerm, deletePerson }) => {
   const searchTermLowerCase = searchTerm.toLowerCase()
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(searchTermLowerCase)
@@ -23,7 +22,7 @@ const Persons = ({ persons, searchTerm }) => {
   return (
     filteredPersons.map(person =>
       <div key={person.id}>
-        {person.name} {person.number}
+        {person.name} {person.number} <button type="submit" onClick={() => deletePerson(person)}>delete</button>
       </div>
     ))
 }
@@ -63,6 +62,16 @@ const App = () => {
       })
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(person.id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -99,6 +108,7 @@ const App = () => {
       <Persons
         persons={persons}
         searchTerm={searchTerm}
+        deletePerson={deletePerson}
       />
     </div>
   )
