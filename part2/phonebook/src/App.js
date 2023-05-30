@@ -1,6 +1,18 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
 const Filter = ({ searchTerm, handleSearchTermChange }) => (
   <div>filter shown with <input value={searchTerm} onChange={handleSearchTermChange} /></div>
 )
@@ -32,6 +44,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(persons => setPersons(persons))
@@ -57,6 +70,9 @@ const App = () => {
             setPersons([...persons.filter(person => person !== existingPerson), returnedPerson])
             setNewName('')
             setNewNumber('')
+
+            setSuccessMessage(`Changed ${returnedPerson.name}`)
+            setTimeout(() => { setSuccessMessage(null) }, 5000)
           })
       }
     }
@@ -73,6 +89,9 @@ const App = () => {
           setPersons([...persons, returnedPerson])
           setNewName('')
           setNewNumber('')
+          
+          setSuccessMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => { setSuccessMessage(null) }, 5000)
         })
     }
   }
@@ -102,6 +121,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={successMessage} />
 
       <Filter
         searchTerm={searchTerm}
