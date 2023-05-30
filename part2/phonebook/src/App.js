@@ -1,7 +1,19 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const Notification = ({ message }) => {
+const ErrorMessage = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+
+const SuccessMessage = ({ message }) => {
   if (message === null) {
     return null
   }
@@ -45,6 +57,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(persons => setPersons(persons))
@@ -89,7 +102,7 @@ const App = () => {
           setPersons([...persons, returnedPerson])
           setNewName('')
           setNewNumber('')
-          
+
           setSuccessMessage(`Added ${returnedPerson.name}`)
           setTimeout(() => { setSuccessMessage(null) }, 5000)
         })
@@ -101,6 +114,11 @@ const App = () => {
       personService
         .remove(person.id)
         .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+        .catch(error => {
+          setErrorMessage(`Information of ${person.name} has already been removed from server`)
+          setTimeout(() => { setErrorMessage(null) }, 5000)
           setPersons(persons.filter(p => p.id !== person.id))
         })
     }
@@ -122,7 +140,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={successMessage} />
+      <ErrorMessage message={errorMessage} />
+      <SuccessMessage message={successMessage} />
 
       <Filter
         searchTerm={searchTerm}
