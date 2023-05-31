@@ -26,7 +26,7 @@ const CountryInfo = ({ country }) => {
   )
 }
 
-const Countries = ({ countries, searchTerm }) => {
+const Countries = ({ countries, searchTerm, setSearchTerm }) => {
   const searchTermLowerCase = searchTerm.toLowerCase()
   const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchTermLowerCase))
 
@@ -47,9 +47,16 @@ const Countries = ({ countries, searchTerm }) => {
   else if (filteredCountries.length <= 10) {
     return (
       filteredCountries
-      .map(country => country.name.common)
-      .sort((a, b) => a.localeCompare(b))
-      .map(name => <div key={name}>{name}</div>)
+        .map(country => country.name.common)
+        .sort((a, b) => a.localeCompare(b))
+        .map(name => {
+          return (
+            <div key={name}>
+              {name}
+              <button type="submit" onClick={() => setSearchTerm(name)}>show</button>
+            </div>
+          )
+        })
     )
   }
   else {
@@ -81,6 +88,7 @@ function App() {
       <Countries
         countries={countries}
         searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
     </div>
   )
