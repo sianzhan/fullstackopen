@@ -1,4 +1,4 @@
-# Exercises 2.6.-2.17. : Course Information
+# Exercises 3.9-3.11. : phonebook frontend
 
 This is a phonebook application that allows users to create, update, and delete contacts.
 
