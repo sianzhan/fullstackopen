@@ -8,6 +8,7 @@ morgan.token('post-data', function (req, res) { return (req.method == 'POST') ? 
 app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-data'))
 app.use(express.json())
+app.use(express.static('build'))
 
 let persons = [
   {
