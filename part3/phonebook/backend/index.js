@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const persons = [
+let persons = [
   {
     "id": 1,
     "name": "Arto Hellas",
@@ -31,12 +31,24 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
-  
+
   if (person) {
     response.json(person)
   } else {
     response.status(404).end()
   }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const personIndex = persons.findIndex(person => person.id === id)
+
+  if (personIndex === -1) {
+    return response.status(404).json({ error: 'Person not found' })
+  }
+
+  persons.splice(personIndex, 1)
+  response.status(204).end()
 })
 
 app.get('/info', (request, response) => {
