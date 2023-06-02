@@ -106,11 +106,15 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
-  const info = `<p>Phonebook has info for ${persons.length} people</p>`
-  const date = `<p>${new Date()}</p>`
-  const combined = info + date
-  response.send(combined)
+app.get('/info', (request, response, next) => {
+  Person.count({})
+    .then(count => {
+      const info = `<p>Phonebook has info for ${count} people</p>`
+      const date = `<p>${new Date()}</p>`
+      const combined = info + date
+      response.send(combined)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
