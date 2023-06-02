@@ -68,6 +68,29 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id
+  const person = request.body
+
+  let error = ''
+
+  if (!person) error = 'body is missing'
+  else if (!person.name) error = "name can't be empty"
+  else if (!person.number) error = "number can't be empty"
+
+  if (error) {
+    return response.status(400).json({
+      error: error
+    })
+  }
+
+  Person.findByIdAndUpdate(id, person, { new: true })
+    .then(person => {
+      response.json(person)
+    })
+    .catch(error => next(error))
+})
+
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
@@ -77,7 +100,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
         response.status(204).end()
       }
       else {
-        response.status(404).json({error: 'person not found'})
+        response.status(404).json({ error: 'person not found' })
       }
     })
     .catch(error => next(error))
