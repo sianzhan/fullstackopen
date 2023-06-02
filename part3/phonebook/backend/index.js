@@ -10,11 +10,12 @@ const app = express()
 morgan.token('post-data', function (req, res) { return (req.method == 'POST') ? JSON.stringify(req.body) : '' })
 
 app.use(cors())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-data'))
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-data'))
 
-app.get('/api/persons', (request, response) => {
+
+app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(persons => {
       if (persons) {
@@ -23,9 +24,10 @@ app.get('/api/persons', (request, response) => {
         response.status(404).end()
       }
     })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
   Person.findById(id)
@@ -36,9 +38,10 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).end()
       }
     })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   let error = ''
@@ -62,24 +65,19 @@ app.post('/api/persons', (request, response) => {
     .then(person => {
       response.json(person)
     })
-    .catch(error => {
-      if (error.code === 11000) {
-        response.status(400).json({
-          error: "name must be unique"
-        })
-      } else {
-        console.error('An unexpected error occurred:', error);
-      }
-    })
+    .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
   Person.findByIdAndDelete(id)
     .then(person => {
       if (person) {
         response.status(204).end()
+      }
+      else {
+        response.status(404).json({error: 'person not found'})
       }
     })
     .catch(error => next(error))
@@ -91,6 +89,30 @@ app.get('/info', (request, response) => {
   const combined = info + date
   response.send(combined)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(JSON.stringify(error))
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    return response.status(400).send({ error: `duplicated key: ${Object.keys(error.keyPattern)}` })
+  }
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
