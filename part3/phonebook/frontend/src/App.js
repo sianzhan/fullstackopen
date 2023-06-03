@@ -87,6 +87,14 @@ const App = () => {
             setSuccessMessage(`Changed ${returnedPerson.name}`)
             setTimeout(() => { setSuccessMessage(null) }, 5000)
           })
+          .catch(error => {
+            if (error.response) {
+              setErrorMessage(error.response.data.error)
+            } else {
+              setErrorMessage(error.message)
+            }
+            setTimeout(() => { setErrorMessage(null) }, 5000)
+          })
       }
     }
     else {
@@ -105,6 +113,14 @@ const App = () => {
 
           setSuccessMessage(`Added ${returnedPerson.name}`)
           setTimeout(() => { setSuccessMessage(null) }, 5000)
+        })
+        .catch(error => {
+          if (error.response) {
+            setErrorMessage(error.response.data.error)
+          } else {
+            setErrorMessage(error.message)
+          }
+          setTimeout(() => { setErrorMessage(null) }, 5000)
         })
     }
   }

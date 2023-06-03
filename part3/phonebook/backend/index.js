@@ -135,6 +135,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: `duplicated key: ${Object.keys(error.keyPattern)}` })
   }
 
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
   next(error)
 }
 
