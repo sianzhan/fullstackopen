@@ -1,4 +1,4 @@
-# Exercises 2.6.-2.17. : Course Information
+# Exercises 2.6.-2.17. : Phonebook
 
 This is a phonebook application that allows users to create, update, and delete contacts.
 
