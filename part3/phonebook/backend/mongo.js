@@ -9,7 +9,7 @@ if (process.argv.length != 3 && process.argv.length != 5) {
   
   To create a new entry:
   node mongo.js <uri> <name> <number>
-  `);
+  `)
 
   process.exit(1)
 }
@@ -35,7 +35,7 @@ if (process.argv.length == 5) {
     number: number,
   })
 
-  person.save().then(result => {
+  person.save().then(() => {
     console.log(`added ${name} number ${number} to phonebook`)
     mongoose.connection.close()
   })

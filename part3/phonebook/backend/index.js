@@ -7,7 +7,7 @@ const Person = require('./models/person')
 
 const app = express()
 
-morgan.token('post-data', function (req, res) { return (req.method == 'POST') ? JSON.stringify(req.body) : '' })
+morgan.token('post-data', function (req) { return (req.method == 'POST') ? JSON.stringify(req.body) : '' })
 
 app.use(cors())
 app.use(express.static('build'))
@@ -47,8 +47,8 @@ app.post('/api/persons', (request, response, next) => {
   let error = ''
 
   if (!body) error = 'body is missing'
-  else if (!body.name) error = "name can't be empty"
-  else if (!body.number) error = "number can't be empty"
+  else if (!body.name) error = 'name can\'t be empty'
+  else if (!body.number) error = 'number can\'t be empty'
 
   if (error) {
     return response.status(400).json({
@@ -75,8 +75,8 @@ app.put('/api/persons/:id', (request, response, next) => {
   let error = ''
 
   if (!person) error = 'body is missing'
-  else if (!person.name) error = "name can't be empty"
-  else if (!person.number) error = "number can't be empty"
+  else if (!person.name) error = 'name can\'t be empty'
+  else if (!person.number) error = 'number can\'t be empty'
 
   if (error) {
     return response.status(400).json({
