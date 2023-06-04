@@ -1,4 +1,4 @@
-# Exercises 3.1.-3.11. : phonebook backend
+# Exercises 3.1.-3.22. : phonebook backend
 
 This is backend service of phonebook application that allows users to create, update, and delete contacts.
 
@@ -17,7 +17,7 @@ Which runs the app in production mode.
 ### `npm run dev`
 
 Which runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3001](http://localhost:3001) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
